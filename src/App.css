@@ -12,3 +12,8 @@
   border-bottom: 1px solid lightgray;
   object-fit: contain; /* keep  the aspect ratio */
 }
+
+.app__signUpForm {
+  display: flex;
+  flex-direction: column;
+}

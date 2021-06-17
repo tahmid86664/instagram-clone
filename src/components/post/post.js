@@ -1,6 +1,7 @@
 import React from 'react'
+import ReactEmoji from 'react-emoji';
 
-import './post.css';
+import './Post.css';
 
 import Avatar from '@material-ui/core/Avatar';
 
@@ -23,7 +24,7 @@ const Post = ({ username, caption, imageUrl }) => {
       className='post__image' />
 
       {/* username and caption */}
-      <h4 className='post__text'><strong>{username}</strong> {caption}</h4>
+      <h4 className='post__text'><strong>{username}</strong> {ReactEmoji.emojify(caption)}</h4>
     </div>
   )
 }

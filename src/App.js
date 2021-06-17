@@ -8,7 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
 
-import Post from './components/post/post';
+import Post from './components/post/Post';
+import PostUpload from './components/post-upload/PostUpload';
 
 // material ui hooks
 function getModalStyle() {
@@ -106,6 +107,13 @@ function App() {
 
   return (
     <div className="app"> 
+
+      {user?.displayName ? ( // here ? before . is work for optional statement. or works as a try catch block.
+        <PostUpload username={user.displayName} />
+      ) : (
+        <h2>Sorry! You need to login first to upload</h2>
+      )}
+
       {/* material ui modal */}
       <Modal
         open={open}

@@ -11,6 +11,8 @@ import { Button, Input } from '@material-ui/core';
 import Post from './components/post/Post';
 import PostUpload from './components/post-upload/PostUpload';
 
+// import InstagramEmbed from 'react-instagram-embed'
+
 // material ui hooks
 function getModalStyle() {
   const top = 50;
@@ -69,7 +71,7 @@ function App() {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
         post: doc.data()
@@ -107,13 +109,6 @@ function App() {
 
   return (
     <div className="app"> 
-
-      {user?.displayName ? ( // here ? before . is work for optional statement. or works as a try catch block.
-        <PostUpload username={user.displayName} />
-      ) : (
-        <h2>Sorry! You need to login first to upload</h2>
-      )}
-
       {/* material ui modal */}
       <Modal
         open={open}
@@ -184,24 +179,54 @@ function App() {
 
       {/* header */}     
       <div className="app__header">
-        <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt="logo" className="app__headerImage" />
-      </div>
+        <img src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png" alt="logo" className="app__headerImage" /> 
 
-      {user ? (
-        <Button onClick={() => auth.signOut()}>Sign Out</Button>
-      ) : (
-        <div className="app__loginContainer">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign Up</Button>
-        </div>
-      )}
+        {user ? (
+          <Button onClick={() => auth.signOut()}>Sign Out</Button>
+        ) : (
+          <div className="app__loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
+      </div>
       
       {/* posts */}
-      {
-        posts.map(({ id, post }) => 
-          <Post key={id} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
-        )
-      }
+      <div className='app__posts'>
+        <div className="app__postsLeft">
+          {
+            posts.map(({ id, post }) => 
+              <Post key={id} postId={id} user={user} username={post.username} caption={post.caption} imageUrl={post.imageUrl} />
+            )
+          }
+        </div>
+
+        <div className="app__postsRight">
+          {/* <InstagramEmbed
+            url='https://www.instagram.com/p/CQQEWVnF33P/'
+            clientAccessToken='1809160072780839|IGQVJYdGlzeXRDc2d3STlrYy15NGY5Q2hSTWVpa25FOEZAkTkdlWVZAkb2w5QVRrbHNScm1QeVJ3ajhjQ0M4V2RRWW14V3lYNk0zOTBHZAl9OMkgwclZAGUFkwODJSekFuNWtPa2lleGl3S25fNG5BQXk0bQZDZD'
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName='div'
+            protocol=''
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          /> */}
+        </div>
+      </div>
+
+            
+      {/* upload post */}
+      <div className="app__uploadPost">
+        {user?.displayName ? ( // here ? before . is work for optional statement. or works as a try catch block.
+          <PostUpload username={user.displayName} />
+        ) : (
+          <h2 className="app__uploadPostDeactivated">Sorry! You need to login first to upload</h2>
+        )}
+      </div>
 
     </div>
   );

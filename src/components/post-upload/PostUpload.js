@@ -59,7 +59,7 @@ const PostUpload = ({ username }) => {
 
   return (
     <div className='postUpload'>
-      <progress value={progress} max="100" />
+      <progress className='postUpload__progress' value={progress} max="100" />
       <input type='text' placeholder='Enter a caption...' value={caption} onChange={(e) => setCaption(e.target.value)} />
       <input type='file' onChange={handleChange} />
 
